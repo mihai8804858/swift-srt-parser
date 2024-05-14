@@ -1,3 +1,3 @@
-public enum SRTParserError: Error {
-    case cantParse
+struct SRTParsingError: Error {
+    let message: String
 }

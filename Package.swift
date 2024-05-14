@@ -13,7 +13,8 @@ let package = Package(
         .library(name: "SRTParser", targets: ["SRTParser"])
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-parsing", .upToNextMajor(from: "0.13.0"))
+        .package(url: "https://github.com/pointfreeco/swift-parsing", .upToNextMajor(from: "0.13.0")),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", .upToNextMajor(from: "1.3.0"))
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
         .testTarget(
             name: "SRTParserTests",
             dependencies: [
-                .target(name: "SRTParser")
+                .target(name: "SRTParser"),
+                .product(name: "CustomDump", package: "swift-custom-dump")
             ],
             path: "Tests"
         )
