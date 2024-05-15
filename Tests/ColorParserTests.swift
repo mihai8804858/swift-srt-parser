@@ -5,7 +5,7 @@ import XCTest
 
 final class ColorParserTests: XCTestCase {
     func test_parse_named_success() throws {
-        var content = "\"red\""[...]
+        var content = "red"[...]
         let expected = SRT.Color.named("red")
         let parser = Parse(input: Substring.self) { ColorParser() }
         let color = try parser.parse(&content)
@@ -14,7 +14,7 @@ final class ColorParserTests: XCTestCase {
     }
 
     func test_parse_hex_success() throws {
-        var content = "\"#FBFF1C\""[...]
+        var content = "#FBFF1C"[...]
         let expected = SRT.Color.rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C))
         let parser = Parse(input: Substring.self) { ColorParser() }
         let color = try parser.parse(&content)
@@ -23,10 +23,10 @@ final class ColorParserTests: XCTestCase {
     }
 
     func test_parse_failure() throws {
-        var content = "\"\""[...]
+        var content = ""[...]
         let parser = Parse(input: Substring.self) { ColorParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "\"\"")
+        XCTAssertNoDifference(content, "")
     }
 
     func test_named_print() throws {
@@ -34,7 +34,7 @@ final class ColorParserTests: XCTestCase {
         let color = SRT.Color.named("blue")
         let parser = Parse(input: Substring.self) { ColorParser() }
         try parser.print(color, into: &content)
-        XCTAssertNoDifference(content, "\"blue\"")
+        XCTAssertNoDifference(content, "blue")
     }
 
     func test_hex_print() throws {
@@ -42,6 +42,6 @@ final class ColorParserTests: XCTestCase {
         let color = SRT.Color.rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C))
         let parser = Parse(input: Substring.self) { ColorParser() }
         try parser.print(color, into: &content)
-        XCTAssertNoDifference(content, "\"#FBFF1C\"")
+        XCTAssertNoDifference(content, "#FBFF1C")
     }
 }

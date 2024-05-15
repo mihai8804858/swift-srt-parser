@@ -4,3 +4,12 @@ included:
   - Package.swift
 excluded:
   - .build
+large_tuple:
+  warning: 5
+nesting:
+  type_level:
+    warning: 3
+  function_level:
+    warning: 3
+function_body_length:
+  warning: 200

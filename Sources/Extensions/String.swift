@@ -4,6 +4,11 @@ extension String {
             .trimmingPrefix(while: predicate)
             .trimmingSuffix(while: predicate)
     }
+
+    func prefix(upTo substring: Substring) -> Substring {
+        guard let range = range(of: substring) else { return self[...] }
+        return self[..<range.lowerBound]
+    }
 }
 
 extension Substring {

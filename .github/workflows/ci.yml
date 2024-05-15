@@ -24,23 +24,30 @@ jobs:
         run: brew install swiftlint
 
       - name: Run SwiftLint
-        run: make lint
+        run: swiftlint lint --strict
 
   build:
     name: Build
     runs-on: macos-14
-    strategy:
-      matrix:
-        config: ['debug', 'release']
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install tools
-        run: gem install xcpretty
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
 
-      - name: Build platforms in ${{ matrix.config }}
-        run: make CONFIG=${{ matrix.config }} build-all-platforms
+      - name: Build
+        run: swift build
+
+  test:
+    name: Test
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Test
+        run: swift test

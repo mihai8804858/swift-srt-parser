@@ -20,7 +20,9 @@ final class CueParserTests: XCTestCase {
                 ),
                 position: .init(x1: 12, x2: 34, y1: 56, y2: 78)
             ),
-            text: "Hello, world!\nHow are you?"
+            text: SRT.StyledText(components: [
+                .plain(text: "Hello, world!\nHow are you?")
+            ])
         )
         let parser = Parse(input: Substring.self) { CueParser() }
         let component = try parser.parse(&content)
@@ -54,7 +56,9 @@ final class CueParserTests: XCTestCase {
                 ),
                 position: .init(x1: 12, x2: 34, y1: 56, y2: 78)
             ),
-            text: "Hello, world!\nHow are you?"
+            text: SRT.StyledText(components: [
+                .plain(text: "Hello, world!\nHow are you?")
+            ])
         )
         let parser = Parse(input: Substring.self) { CueParser() }
         try parser.print(cue, into: &content)

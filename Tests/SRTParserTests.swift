@@ -1,10 +1,11 @@
-import SRTParser
+@testable import SRTParser
 import Parsing
 import CustomDump
 import XCTest
 
 final class SRTParserTests: XCTestCase {
     func test_parse() throws {
+        // swiftlint:disable trailing_whitespace
         let content = """
         1
         00:02:17,440 --> 00:02:20,375
@@ -34,6 +35,8 @@ final class SRTParserTests: XCTestCase {
 
 
         """
+        // swiftlint:enable trailing_whitespace
+
         let expected = SRT(cues: [
             SRT.Cue(
                 counter: 1,
@@ -44,10 +47,13 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                Senator, we're making
-                our <b>final</b> approach into {u}Coruscant{/u}.
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "Senator, we're making\nour "),
+                    .bold(children: [.plain(text: "final")]),
+                    .plain(text: " approach into "),
+                    .underline(children: [.plain(text: "Coruscant")]),
+                    .plain(text: ".")
+                ])
             ),
             SRT.Cue(
                 counter: 2,
@@ -58,9 +64,13 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                {b}Very good, {i}Lieutenant{/i}{/b}.
-                """
+                text: SRT.StyledText(components: [
+                    .bold(children: [
+                        .plain(text: "Very good, "),
+                        .italic(children: [.plain(text: "Lieutenant")])
+                    ]),
+                    .plain(text: ".")
+                ])
             ),
             SRT.Cue(
                 counter: 3,
@@ -71,9 +81,11 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: SRT.Position(x1: 201, x2: 516, y1: 397, y2: 423)
                 ),
-                text: """
-                <font color="#fbff1c">Whose side is time on?</font>
-                """
+                text: SRT.StyledText(components: [
+                    .color(color: .rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C)), children: [
+                        .plain(text: "Whose side is time on?")
+                    ])
+                ])
             ),
             SRT.Cue(
                 counter: 4,
@@ -84,9 +96,9 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: SRT.Position(x1: 203, x2: 511, y1: 359, y2: 431)
                 ),
-                text: """
-                v
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "v")
+                ])
             ),
             SRT.Cue(
                 counter: 5,
@@ -97,9 +109,9 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                [speaks Icelandic]
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "[speaks Icelandic]")
+                ])
             ),
             SRT.Cue(
                 counter: 6,
@@ -110,14 +122,14 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                [man 3] <i>♪The admiral
-                begins his expedition♪</i>
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "[man 3] "),
+                    .italic(children: [.plain(text: "♪The admiral\nbegins his expedition♪")])
+                ])
             )
         ])
         let parser = SRTParser()
-        let srt = try parser.parse(content: content)
+        let srt = try parser.parse(content)
         XCTAssertNoDifference(srt, expected)
     }
 
@@ -132,10 +144,13 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                Senator, we're making
-                our <b>final</b> approach into {u}Coruscant{/u}.
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "Senator, we're making\nour "),
+                    .bold(children: [.plain(text: "final")]),
+                    .plain(text: " approach into "),
+                    .underline(children: [.plain(text: "Coruscant")]),
+                    .plain(text: ".")
+                ])
             ),
             SRT.Cue(
                 counter: 2,
@@ -146,9 +161,13 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                <b>Very good, {i}Lieutenant{/i}</b>.
-                """
+                text: SRT.StyledText(components: [
+                    .bold(children: [
+                        .plain(text: "Very good, "),
+                        .italic(children: [.plain(text: "Lieutenant")])
+                    ]),
+                    .plain(text: ".")
+                ])
             ),
             SRT.Cue(
                 counter: 3,
@@ -159,9 +178,11 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: SRT.Position(x1: 201, x2: 516, y1: 397, y2: 423)
                 ),
-                text: """
-                <font color="#FBFF1C">Whose side is time on?</font>
-                """
+                text: SRT.StyledText(components: [
+                    .color(color: .rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C)), children: [
+                        .plain(text: "Whose side is time on?")
+                    ])
+                ])
             ),
             SRT.Cue(
                 counter: 4,
@@ -172,9 +193,9 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: SRT.Position(x1: 203, x2: 511, y1: 359, y2: 431)
                 ),
-                text: """
-                v
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "v")
+                ])
             ),
             SRT.Cue(
                 counter: 5,
@@ -185,9 +206,9 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                [speaks Icelandic]
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "[speaks Icelandic]")
+                ])
             ),
             SRT.Cue(
                 counter: 6,
@@ -198,22 +219,22 @@ final class SRTParserTests: XCTestCase {
                     ),
                     position: nil
                 ),
-                text: """
-                [man 3] <i>♪The admiral
-                begins his expedition♪{/i}
-                """
+                text: SRT.StyledText(components: [
+                    .plain(text: "[man 3] "),
+                    .italic(children: [.plain(text: "♪The admiral\nbegins his expedition♪")])
+                ])
             )
         ])
-        let content = try SRTParser().print(srt: srt)
+        let content = try SRTParser().print(srt)
         XCTAssertNoDifference(content, """
         1
         00:02:17,440 --> 00:02:20,375
         Senator, we're making
-        our <b>final</b> approach into {u}Coruscant{/u}.
+        our <b>final</b> approach into <u>Coruscant</u>.
 
         2
         00:02:20,476 --> 00:02:22,501
-        <b>Very good, {i}Lieutenant{/i}</b>.
+        <b>Very good, <i>Lieutenant</i></b>.
 
         3
         00:02:24,948 --> 00:02:26,247 X1:201 X2:516 Y1:397 Y2:423
@@ -230,7 +251,7 @@ final class SRTParserTests: XCTestCase {
         6
         00:02:45,000 --> 00:02:48,295
         [man 3] <i>♪The admiral
-        begins his expedition♪{/i}
+        begins his expedition♪</i>
         """)
     }
 }

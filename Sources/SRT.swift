@@ -12,15 +12,17 @@ extension SRT {
     public struct Cue: Hashable {
         public let counter: Int
         public let metadata: CueMetadata
-        public let text: String
+        public let text: StyledText
 
-        public init(counter: Int, metadata: CueMetadata, text: String) {
+        public init(counter: Int, metadata: CueMetadata, text: StyledText) {
             self.counter = counter
             self.metadata = metadata
             self.text = text
         }
     }
+}
 
+extension SRT {
     public struct CueMetadata: Hashable {
         public let timing: Timing
         public let position: Position?
@@ -30,7 +32,9 @@ extension SRT {
             self.position = position
         }
     }
+}
 
+extension SRT {
     public struct Timing: Hashable {
         public let start: Time
         public let end: Time
@@ -40,7 +44,9 @@ extension SRT {
             self.end = end
         }
     }
+}
 
+extension SRT {
     public struct Time: Hashable {
         public let hours: Int
         public let minutes: Int
@@ -48,12 +54,12 @@ extension SRT {
         public let milliseconds: Int
 
         public var interval: TimeInterval {
-            let sec = TimeInterval(seconds)
-            let min = TimeInterval(minutes * 60)
-            let hr = TimeInterval(hours * 3600)
-            let ms = TimeInterval(milliseconds) / 1000
+            let seconds = TimeInterval(seconds)
+            let minutes = TimeInterval(minutes * 60)
+            let hours = TimeInterval(hours * 3600)
+            let milliseconds = TimeInterval(milliseconds) / 1000
 
-            return hr + min + sec + ms
+            return hours + minutes + seconds + milliseconds
         }
 
         public init(hours: Int, minutes: Int, seconds: Int, milliseconds: Int) {
@@ -63,7 +69,10 @@ extension SRT {
             self.milliseconds = milliseconds
         }
     }
+}
 
+// swiftlint:disable identifier_name
+extension SRT {
     public struct Position: Hashable {
         public let x1: Int
         public let x2: Int
@@ -77,7 +86,10 @@ extension SRT {
             self.y2 = y2
         }
     }
+}
+// swiftlint:enable identifier_name
 
+extension SRT {
     public enum Color: Hashable {
         public struct RGB: Hashable {
             public let red: UInt8
@@ -93,5 +105,27 @@ extension SRT {
 
         case named(String)
         case rgb(RGB)
+    }
+}
+
+extension SRT {
+    public struct StyledText: Hashable {
+        public enum Component: Hashable {
+            case plain(text: String)
+            case bold(children: [Component])
+            case italic(children: [Component])
+            case underline(children: [Component])
+            case color(color: SRT.Color, children: [Component])
+        }
+
+        public let components: [Component]
+
+        public init(components: [Component]) {
+            self.components = components
+        }
+
+        public init(text: String) throws {
+            self = try StyledTextParser().parse(text)
+        }
     }
 }

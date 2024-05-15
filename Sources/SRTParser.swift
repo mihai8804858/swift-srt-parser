@@ -6,11 +6,11 @@ public struct SRTParser {
 
     public init() {}
 
-    public func parse(content: String) throws -> SRT {
+    public func parse(_ content: String) throws -> SRT {
         try parser.parse(content.trimmingEdges(while: \.isNewline))
     }
 
-    public func print(srt: SRT) throws -> String {
+    public func print(_ srt: SRT) throws -> String {
         String(decoding: try parser.print(srt), as: UTF8.self)
     }
 }
@@ -38,7 +38,7 @@ struct CueParser: ParserPrinter {
             CueMetadataParser()
             Whitespace(.horizontal)
             Whitespace(1, .vertical)
-            PlainTextParser()
+            TextParser()
         }
     }
 }
@@ -108,36 +108,29 @@ struct PositionParser: ParserPrinter {
     }
 }
 
-struct PlainTextParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, String> {
-        OneOf {
-            PrefixUpTo("\n\n".utf8)
-            Prefix(1...)
-        }
-        .map(.string)
+struct TextParser: ParserPrinter {
+    func parse(_ input: inout Substring.UTF8View) throws -> SRT.StyledText {
+        let utf8Input = String(decoding: input, as: UTF8.self)
+        let prefix = String(utf8Input.prefix(upTo: "\n\n"))
+        let text = try StyledTextParser().parse(prefix)
+        input.removeFirst(prefix.utf8.count)
+
+        return text
     }
 
-    func print(_ output: String, into input: inout Substring.UTF8View) throws {
-        input.prepend(contentsOf: output.utf8)
+    func print(_ output: SRT.StyledText, into input: inout Substring.UTF8View) throws {
+        input.prepend(contentsOf: try StyledTextParser().print(output).utf8)
     }
 }
 
 struct ColorParser: ParserPrinter {
     var body: some ParserPrinter<Substring.UTF8View, SRT.Color> {
         OneOf {
-            Parse {
-                "\"".utf8
-                RGBParser()
-                "\"".utf8
-            }
-            .map(.case(SRT.Color.rgb))
-            Parse {
-                "\"".utf8
-                Prefix(1...) { $0 != UInt8(ascii: "\"") }
-                "\"".utf8
-            }
-            .map(.string)
-            .map(.case(SRT.Color.named))
+            RGBParser()
+                .map(.case(SRT.Color.rgb))
+            Prefix(1...) { $0 != UInt8(ascii: "\"") }
+                .map(.string)
+                .map(.case(SRT.Color.named))
         }
     }
 }
@@ -167,22 +160,5 @@ struct HexByteParser: ParserPrinter {
     func print(_ output: UInt8, into input: inout Substring.UTF8View) {
         let byte = String(output, radix: 16, uppercase: true)
         input.prepend(contentsOf: byte.count == 1 ? "0\(byte)".utf8 : "\(byte)".utf8)
-    }
-}
-
-private extension Substring.UTF8View {
-    subscript(safe index: Index) -> Element? {
-        guard indices.contains(index) else { return nil }
-        return self[index]
-    }
-
-    func isPlainTextTermination(at index: Int) -> Bool {
-        let currentIndex = self.index(startIndex, offsetBy: index)
-        let nextIndex = self.index(startIndex, offsetBy: index + 1)
-        if self[safe: currentIndex] == .init(ascii: "<") { return true }
-        if self[safe: currentIndex] == .init(ascii: "{") { return true }
-        if self[safe: currentIndex] == .init(ascii: "\n") && self[safe: nextIndex] == .init(ascii: "\n") { return true }
-
-        return false
     }
 }
