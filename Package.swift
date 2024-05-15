@@ -32,7 +32,8 @@ let package = Package(
                 .target(name: "SRTParser"),
                 .product(name: "CustomDump", package: "swift-custom-dump")
             ],
-            path: "Tests"
+            path: "Tests",
+            resources: [.copy("Resources/Subtitles")]
         )
     ]
 )
