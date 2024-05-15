@@ -11,7 +11,7 @@ final class CueMetadataParserTests: XCTestCase {
                 start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),
                 end: SRT.Time(hours: 23, minutes: 45, seconds: 67, milliseconds: 890)
             ),
-            position: SRT.Position(x1: 12, x2: 34, y1: 56, y2: 78)
+            coordinates: SRT.Coordinates(x1: 12, x2: 34, y1: 56, y2: 78)
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         let time = try parser.parse(&content)
@@ -26,7 +26,7 @@ final class CueMetadataParserTests: XCTestCase {
                 start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),
                 end: SRT.Time(hours: 23, minutes: 45, seconds: 67, milliseconds: 890)
             ),
-            position: nil
+            coordinates: nil
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         let time = try parser.parse(&content)
@@ -48,7 +48,7 @@ final class CueMetadataParserTests: XCTestCase {
                 start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),
                 end: SRT.Time(hours: 23, minutes: 45, seconds: 67, milliseconds: 890)
             ),
-            position: SRT.Position(x1: 12, x2: 34, y1: 56, y2: 78)
+            coordinates: SRT.Coordinates(x1: 12, x2: 34, y1: 56, y2: 78)
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         try parser.print(metadata, into: &content)
@@ -62,7 +62,7 @@ final class CueMetadataParserTests: XCTestCase {
                 start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),
                 end: SRT.Time(hours: 23, minutes: 45, seconds: 67, milliseconds: 890)
             ),
-            position: nil
+            coordinates: nil
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         try parser.print(metadata, into: &content)

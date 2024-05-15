@@ -45,11 +45,11 @@ struct CueParser: ParserPrinter {
 
 struct CueMetadataParser: ParserPrinter {
     var body: some ParserPrinter<Substring.UTF8View, SRT.CueMetadata> {
-        ParsePrint(.memberwise(SRT.CueMetadata.init(timing:position:))) {
+        ParsePrint(.memberwise(SRT.CueMetadata.init(timing:coordinates:))) {
             TimingParser()
             Optionally {
                 Whitespace(1..., .horizontal)
-                PositionParser()
+                CoordinatesParser()
             }
         }
     }
@@ -90,9 +90,9 @@ struct TimeParser: ParserPrinter {
     }
 }
 
-struct PositionParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Position> {
-        ParsePrint(.memberwise(SRT.Position.init(x1:x2:y1:y2:))) {
+struct CoordinatesParser: ParserPrinter {
+    var body: some ParserPrinter<Substring.UTF8View, SRT.Coordinates> {
+        ParsePrint(.memberwise(SRT.Coordinates.init(x1:x2:y1:y2:))) {
             "X1:".utf8
             Int.parser()
             Whitespace(1..., .horizontal)

@@ -25,11 +25,11 @@ extension SRT {
 extension SRT {
     public struct CueMetadata: Hashable {
         public let timing: Timing
-        public let position: Position?
+        public let coordinates: Coordinates?
 
-        public init(timing: Timing, position: Position?) {
+        public init(timing: Timing, coordinates: Coordinates?) {
             self.timing = timing
-            self.position = position
+            self.coordinates = coordinates
         }
     }
 }
@@ -73,7 +73,7 @@ extension SRT {
 
 // swiftlint:disable identifier_name
 extension SRT {
-    public struct Position: Hashable {
+    public struct Coordinates: Hashable {
         public let x1: Int
         public let x2: Int
         public let y1: Int

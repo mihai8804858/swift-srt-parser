@@ -45,7 +45,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 17, milliseconds: 440),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 20, milliseconds: 375)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "Senator, we're making\nour "),
@@ -62,7 +62,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 20, milliseconds: 476),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 22, milliseconds: 501)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .bold(children: [
@@ -79,7 +79,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 24, milliseconds: 948),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 26, milliseconds: 247)
                     ),
-                    position: SRT.Position(x1: 201, x2: 516, y1: 397, y2: 423)
+                    coordinates: SRT.Coordinates(x1: 201, x2: 516, y1: 397, y2: 423)
                 ),
                 text: SRT.StyledText(components: [
                     .color(color: .rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C)), children: [
@@ -94,7 +94,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 36, milliseconds: 389),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 39, milliseconds: 290)
                     ),
-                    position: SRT.Position(x1: 203, x2: 511, y1: 359, y2: 431)
+                    coordinates: SRT.Coordinates(x1: 203, x2: 511, y1: 359, y2: 431)
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "v")
@@ -107,7 +107,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 41, milliseconds: 0),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 43, milliseconds: 295)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[speaks Icelandic]")
@@ -120,7 +120,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 45, milliseconds: 0),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 48, milliseconds: 295)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[man 3] "),
@@ -142,7 +142,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 17, milliseconds: 440),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 20, milliseconds: 375)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "Senator, we're making\nour "),
@@ -159,7 +159,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 20, milliseconds: 476),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 22, milliseconds: 501)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .bold(children: [
@@ -176,7 +176,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 24, milliseconds: 948),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 26, milliseconds: 247)
                     ),
-                    position: SRT.Position(x1: 201, x2: 516, y1: 397, y2: 423)
+                    coordinates: SRT.Coordinates(x1: 201, x2: 516, y1: 397, y2: 423)
                 ),
                 text: SRT.StyledText(components: [
                     .color(color: .rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C)), children: [
@@ -191,7 +191,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 36, milliseconds: 389),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 39, milliseconds: 290)
                     ),
-                    position: SRT.Position(x1: 203, x2: 511, y1: 359, y2: 431)
+                    coordinates: SRT.Coordinates(x1: 203, x2: 511, y1: 359, y2: 431)
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "v")
@@ -204,7 +204,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 41, milliseconds: 0),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 43, milliseconds: 295)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[speaks Icelandic]")
@@ -217,7 +217,7 @@ final class SRTParserTests: XCTestCase {
                         start: SRT.Time(hours: 0, minutes: 2, seconds: 45, milliseconds: 0),
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 48, milliseconds: 295)
                     ),
-                    position: nil
+                    coordinates: nil
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[man 3] "),
