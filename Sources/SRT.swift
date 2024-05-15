@@ -26,10 +26,12 @@ extension SRT {
     public struct CueMetadata: Hashable {
         public let timing: Timing
         public let coordinates: Coordinates?
+        public let position: Position?
 
-        public init(timing: Timing, coordinates: Coordinates?) {
+        public init(timing: Timing, coordinates: Coordinates?, position: Position?) {
             self.timing = timing
             self.coordinates = coordinates
+            self.position = position
         }
     }
 }
@@ -88,6 +90,51 @@ extension SRT {
     }
 }
 // swiftlint:enable identifier_name
+
+extension SRT {
+    public enum Position: Hashable {
+        case topLeft
+        case topCenter
+        case topRight
+        case middleLeft
+        case middleCenter
+        case middleRight
+        case bottomLeft
+        case bottomCenter
+        case bottomRight
+        case unknown(number: Int)
+
+        var padNumber: Int {
+            switch self {
+            case .topLeft: 7
+            case .topCenter: 8
+            case .topRight: 9
+            case .middleLeft: 4
+            case .middleCenter: 5
+            case .middleRight: 6
+            case .bottomLeft: 1
+            case .bottomCenter: 2
+            case .bottomRight: 3
+            case .unknown(let number): number
+            }
+        }
+
+        public init(padNumber: Int) {
+            switch padNumber {
+            case 7: self = .topLeft
+            case 8: self = .topCenter
+            case 9: self = .topRight
+            case 4: self = .middleLeft
+            case 5: self = .middleCenter
+            case 6: self = .middleRight
+            case 1: self = .bottomLeft
+            case 2: self = .bottomCenter
+            case 3: self = .bottomRight
+            default: self = .unknown(number: padNumber)
+            }
+        }
+    }
+}
 
 extension SRT {
     public enum Color: Hashable {

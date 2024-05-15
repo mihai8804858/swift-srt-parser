@@ -36,8 +36,6 @@ struct CueParser: ParserPrinter {
             Whitespace(.horizontal)
             Whitespace(1, .vertical)
             CueMetadataParser()
-            Whitespace(.horizontal)
-            Whitespace(1, .vertical)
             TextParser()
         }
     }
@@ -45,11 +43,16 @@ struct CueParser: ParserPrinter {
 
 struct CueMetadataParser: ParserPrinter {
     var body: some ParserPrinter<Substring.UTF8View, SRT.CueMetadata> {
-        ParsePrint(.memberwise(SRT.CueMetadata.init(timing:coordinates:))) {
+        ParsePrint(.memberwise(SRT.CueMetadata.init(timing:coordinates:position:))) {
             TimingParser()
             Optionally {
                 Whitespace(1..., .horizontal)
                 CoordinatesParser()
+            }
+            Whitespace(.horizontal)
+            Whitespace(1, .vertical)
+            Optionally {
+                PositionParser()
             }
         }
     }
@@ -105,6 +108,20 @@ struct CoordinatesParser: ParserPrinter {
             "Y2:".utf8
             Int.parser()
         }
+    }
+}
+
+struct PositionParser: ParserPrinter {
+    var body: some ParserPrinter<Substring.UTF8View, SRT.Position> {
+        ParsePrint(.memberwise(SRT.Position.init(padNumber:))) {
+            "{\\an".utf8
+            Int.parser()
+            "}".utf8
+        }
+    }
+
+    func print(_ output: SRT.Position, into input: inout Substring.UTF8View) throws {
+        input.prepend(contentsOf: "{\\an\(output.padNumber)}".utf8)
     }
 }
 
