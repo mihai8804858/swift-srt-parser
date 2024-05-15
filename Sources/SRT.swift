@@ -12,9 +12,9 @@ extension SRT {
     public struct Cue: Hashable {
         public let counter: Int
         public let metadata: CueMetadata
-        public let text: Text
+        public let text: String
 
-        public init(counter: Int, metadata: CueMetadata, text: Text) {
+        public init(counter: Int, metadata: CueMetadata, text: String) {
             self.counter = counter
             self.metadata = metadata
             self.text = text
@@ -75,22 +75,6 @@ extension SRT {
             self.x2 = x2
             self.y1 = y1
             self.y2 = y2
-        }
-    }
-
-    public struct Text: Hashable {
-        public enum Component: Hashable {
-            case plain(text: String)
-            case bold(text: String)
-            case italic(text: String)
-            case underline(text: String)
-            case color(color: Color, text: String)
-        }
-
-        public let components: [Component]
-
-        public init(components: [Component]) {
-            self.components = components
         }
     }
 

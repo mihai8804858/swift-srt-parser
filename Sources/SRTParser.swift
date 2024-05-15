@@ -7,11 +7,7 @@ public struct SRTParser {
     public init() {}
 
     public func parse(content: String) throws -> SRT {
-        let sanitizedContent = content
-            .trimmingPrefix(while: \.isNewline)
-            .trimmingSuffix(while: \.isNewline)
-
-        return try parser.parse(sanitizedContent)
+        try parser.parse(content.trimmingEdges(while: \.isNewline))
     }
 
     public func print(srt: SRT) throws -> String {
@@ -42,7 +38,7 @@ struct CueParser: ParserPrinter {
             CueMetadataParser()
             Whitespace(.horizontal)
             Whitespace(1, .vertical)
-            TextParser()
+            PlainTextParser()
         }
     }
 }
@@ -112,104 +108,9 @@ struct PositionParser: ParserPrinter {
     }
 }
 
-struct TextParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text> {
-        ParsePrint(.memberwise(SRT.Text.init(components:))) {
-            Many(1...) {
-                TextComponentParser()
-            }
-        }
-    }
-}
-
-struct TextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        OneOf {
-            BoldTextComponentParser()
-            ItalicTextComponentParser()
-            UnderlineTextComponentParser()
-            ColouredTextComponentParser()
-            PlainTextComponentParser()
-        }
-    }
-}
-
-struct BoldTextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        Parse {
-            OneOf {
-                "<b>".utf8
-                "{b}".utf8
-            }
-            PlainTextParser()
-            OneOf {
-                "</b>".utf8
-                "{/b}".utf8
-            }
-        }
-        .map(.case(SRT.Text.Component.bold))
-    }
-}
-
-struct ItalicTextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        ParsePrint {
-            OneOf {
-                "<i>".utf8
-                "{i}".utf8
-            }
-            PlainTextParser()
-            OneOf {
-                "</i>".utf8
-                "{/i}".utf8
-            }
-        }
-        .map(.case(SRT.Text.Component.italic))
-    }
-}
-
-struct UnderlineTextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        ParsePrint {
-            OneOf {
-                "<u>".utf8
-                "{u}".utf8
-            }
-            PlainTextParser()
-            OneOf {
-                "</u>".utf8
-                "{/u}".utf8
-            }
-        }
-        .map(.case(SRT.Text.Component.underline))
-    }
-}
-
-struct ColouredTextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        ParsePrint {
-            "<font color=".utf8
-            ColorParser()
-            ">".utf8
-            PlainTextParser()
-            "</font>".utf8
-        }
-        .map(.case(SRT.Text.Component.color))
-    }
-}
-
-struct PlainTextComponentParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Text.Component> {
-        PlainTextParser()
-            .map(.case(SRT.Text.Component.plain))
-    }
-}
-
 struct PlainTextParser: ParserPrinter {
     var body: some ParserPrinter<Substring.UTF8View, String> {
         OneOf {
-            PrefixUpTo("<".utf8)
-            PrefixUpTo("{".utf8)
             PrefixUpTo("\n\n".utf8)
             Prefix(1...)
         }

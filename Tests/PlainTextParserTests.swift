@@ -4,24 +4,6 @@ import CustomDump
 import XCTest
 
 final class PlainTextParserTests: XCTestCase {
-    func test_parse_up_to_tag_success() throws {
-        var content = "hello<"[...]
-        let expected = "hello"
-        let parser = Parse(input: Substring.self) { PlainTextParser() }
-        let color = try parser.parse(&content)
-        XCTAssertNoDifference(color, expected)
-        XCTAssertNoDifference(content, "<")
-    }
-
-    func test_parse_up_to_bracket_success() throws {
-        var content = "hello{"[...]
-        let expected = "hello"
-        let parser = Parse(input: Substring.self) { PlainTextParser() }
-        let color = try parser.parse(&content)
-        XCTAssertNoDifference(color, expected)
-        XCTAssertNoDifference(content, "{")
-    }
-
     func test_parse_up_to_cue_separator_success() throws {
         var content = "hello\n\n"[...]
         let expected = "hello"

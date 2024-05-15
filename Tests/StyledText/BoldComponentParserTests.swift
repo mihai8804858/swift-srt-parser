@@ -3,11 +3,11 @@ import Parsing
 import CustomDump
 import XCTest
 
-final class BoldTextComponentParserTests: XCTestCase {
+final class BoldComponentParserTests: XCTestCase {
     func test_parse_tag_success() throws {
         var content = "<b>text</b>"[...]
-        let expected = SRT.Text.Component.bold(text: "text")
-        let parser = Parse(input: Substring.self) { BoldTextComponentParser() }
+        let expected = StyledText.Component.bold(children: [.plain(text: "text")])
+        let parser = Parse(input: Substring.self) { BoldComponentParser() }
         let component = try parser.parse(&content)
         XCTAssertNoDifference(component, expected)
         XCTAssertNoDifference(content, "")
@@ -15,8 +15,8 @@ final class BoldTextComponentParserTests: XCTestCase {
 
     func test_parse_bracket_success() throws {
         var content = "{b}text{/b}"[...]
-        let expected = SRT.Text.Component.bold(text: "text")
-        let parser = Parse(input: Substring.self) { BoldTextComponentParser() }
+        let expected = StyledText.Component.bold(children: [.plain(text: "text")])
+        let parser = Parse(input: Substring.self) { BoldComponentParser() }
         let component = try parser.parse(&content)
         XCTAssertNoDifference(component, expected)
         XCTAssertNoDifference(content, "")
@@ -24,16 +24,16 @@ final class BoldTextComponentParserTests: XCTestCase {
 
     func test_parse_failure() throws {
         var content = "<b>text<b>"[...]
-        let parser = Parse(input: Substring.self) { BoldTextComponentParser() }
+        let parser = Parse(input: Substring.self) { BoldComponentParser() }
         XCTAssertThrowsError(try parser.parse(&content))
         XCTAssertNoDifference(content, "<b>text<b>")
     }
 
     func test_print() throws {
         var content = ""[...]
-        let component = SRT.Text.Component.bold(text: "text")
-        let parser = Parse(input: Substring.self) { BoldTextComponentParser() }
+        let component = StyledText.Component.bold(children: [.plain(text: "text")])
+        let parser = Parse(input: Substring.self) { BoldComponentParser() }
         try parser.print(component, into: &content)
-        XCTAssertNoDifference(content, "{b}text{/b}")
+        XCTAssertNoDifference(content, "<b>text</b>")
     }
 }
