@@ -20,7 +20,7 @@ final class TimingParserTests: XCTestCase {
         var content = "12:34:56,789 --> "[...]
         let parser = Parse(input: Substring.self) { TimingParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "12:34:56,789 --> ")
+        XCTAssertNoDifference(content, "")
     }
 
     func test_print() throws {

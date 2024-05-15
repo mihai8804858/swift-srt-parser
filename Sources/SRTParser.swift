@@ -11,12 +11,12 @@ public struct SRTParser {
     }
 
     public func print(_ srt: SRT) throws -> String {
-        String(decoding: try parser.print(srt), as: UTF8.self)
+        String(try parser.print(srt))
     }
 }
 
 struct CuesParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT> {
+    var body: some ParserPrinter<Substring, SRT> {
         ParsePrint(.memberwise(SRT.init(cues:))) {
             Many {
                 CueParser()
@@ -30,7 +30,7 @@ struct CuesParser: ParserPrinter {
 }
 
 struct CueParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Cue> {
+    var body: some ParserPrinter<Substring, SRT.Cue> {
         ParsePrint(.memberwise(SRT.Cue.init(counter:metadata:text:))) {
             Int.parser()
             Whitespace(.horizontal)
@@ -42,7 +42,7 @@ struct CueParser: ParserPrinter {
 }
 
 struct CueMetadataParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.CueMetadata> {
+    var body: some ParserPrinter<Substring, SRT.CueMetadata> {
         ParsePrint(.memberwise(SRT.CueMetadata.init(timing:coordinates:position:))) {
             TimingParser()
             Optionally {
@@ -59,11 +59,11 @@ struct CueMetadataParser: ParserPrinter {
 }
 
 struct TimingParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Timing> {
+    var body: some ParserPrinter<Substring, SRT.Timing> {
         ParsePrint(.memberwise(SRT.Timing.init(start:end:))) {
             TimeParser()
             Whitespace(1..., .horizontal)
-            "-->".utf8
+            "-->"
             Whitespace(1..., .horizontal)
             TimeParser()
         }
@@ -71,81 +71,80 @@ struct TimingParser: ParserPrinter {
 }
 
 struct TimeParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Time> {
+    var body: some ParserPrinter<Substring, SRT.Time> {
         ParsePrint(.memberwise(SRT.Time.init(hours:minutes:seconds:milliseconds:))) {
             Int.parser()
-            ":".utf8
+            ":"
             Int.parser()
-            ":".utf8
+            ":"
             Int.parser()
-            ",".utf8
+            ","
             Int.parser()
         }
     }
 
-    func print(_ output: SRT.Time, into input: inout Substring.UTF8View) throws {
+    func print(_ output: SRT.Time, into input: inout Substring) throws {
         let hours = String(format: "%02d", output.hours)
         let minutes = String(format: "%02d", output.minutes)
         let seconds = String(format: "%02d", output.seconds)
         let milliseconds = String(format: "%03d", output.milliseconds)
         let text = "\(hours):\(minutes):\(seconds),\(milliseconds)"
-        input.prepend(contentsOf: text.utf8)
+        input.prepend(contentsOf: text)
     }
 }
 
 struct CoordinatesParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Coordinates> {
+    var body: some ParserPrinter<Substring, SRT.Coordinates> {
         ParsePrint(.memberwise(SRT.Coordinates.init(x1:x2:y1:y2:))) {
-            "X1:".utf8
+            "X1:"
             Int.parser()
             Whitespace(1..., .horizontal)
-            "X2:".utf8
+            "X2:"
             Int.parser()
             Whitespace(1..., .horizontal)
-            "Y1:".utf8
+            "Y1:"
             Int.parser()
             Whitespace(1..., .horizontal)
-            "Y2:".utf8
+            "Y2:"
             Int.parser()
         }
     }
 }
 
 struct PositionParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Position> {
+    var body: some ParserPrinter<Substring, SRT.Position> {
         ParsePrint(.memberwise(SRT.Position.init(padNumber:))) {
-            "{\\an".utf8
+            "{\\an"
             Int.parser()
-            "}".utf8
+            "}"
         }
     }
 
-    func print(_ output: SRT.Position, into input: inout Substring.UTF8View) throws {
-        input.prepend(contentsOf: "{\\an\(output.padNumber)}".utf8)
+    func print(_ output: SRT.Position, into input: inout Substring) throws {
+        input.prepend(contentsOf: "{\\an\(output.padNumber)}")
     }
 }
 
 struct TextParser: ParserPrinter {
-    func parse(_ input: inout Substring.UTF8View) throws -> SRT.StyledText {
-        let utf8Input = String(decoding: input, as: UTF8.self)
-        let prefix = String(utf8Input.prefix(upTo: "\n\n"))
+    func parse(_ input: inout Substring) throws -> SRT.StyledText {
+        let prefix = String(input).prefix(upTo: "\n\n")
         let text = try StyledTextParser().parse(prefix)
-        input.removeFirst(prefix.utf8.count)
+        input.removeFirst(prefix.count)
 
         return text
     }
 
-    func print(_ output: SRT.StyledText, into input: inout Substring.UTF8View) throws {
-        input.prepend(contentsOf: try StyledTextParser().print(output).utf8)
+    func print(_ output: SRT.StyledText, into input: inout Substring) throws {
+        input.prepend(contentsOf: try StyledTextParser().print(output))
     }
 }
 
 struct ColorParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Color> {
+    var body: some ParserPrinter<Substring, SRT.Color> {
         OneOf {
             RGBParser()
                 .map(.case(SRT.Color.rgb))
-            Prefix(1...) { $0 != UInt8(ascii: "\"") }
+            Prefix(1...) { $0 != "\"" }
                 .map(.string)
                 .map(.case(SRT.Color.named))
         }
@@ -153,9 +152,9 @@ struct ColorParser: ParserPrinter {
 }
 
 struct RGBParser: ParserPrinter {
-    var body: some ParserPrinter<Substring.UTF8View, SRT.Color.RGB> {
+    var body: some ParserPrinter<Substring, SRT.Color.RGB> {
         ParsePrint(.memberwise(SRT.Color.RGB.init(red:green:blue:))) {
-            "#".utf8
+            "#"
             HexByteParser()
             HexByteParser()
             HexByteParser()
@@ -164,9 +163,9 @@ struct RGBParser: ParserPrinter {
 }
 
 struct HexByteParser: ParserPrinter {
-    func parse(_ input: inout Substring.UTF8View) throws -> UInt8 {
+    func parse(_ input: inout Substring) throws -> UInt8 {
         let prefix = input.prefix(2)
-        guard prefix.count == 2, let byte = UInt8(String(decoding: prefix, as: UTF8.self), radix: 16) else {
+        guard prefix.count == 2, let byte = UInt8(prefix, radix: 16) else {
             throw SRTParsingError(message: "Failure parsing hex byte")
         }
         input.removeFirst(2)
@@ -174,8 +173,8 @@ struct HexByteParser: ParserPrinter {
         return byte
     }
 
-    func print(_ output: UInt8, into input: inout Substring.UTF8View) {
+    func print(_ output: UInt8, into input: inout Substring) {
         let byte = String(output, radix: 16, uppercase: true)
-        input.prepend(contentsOf: byte.count == 1 ? "0\(byte)".utf8 : "\(byte)".utf8)
+        input.prepend(contentsOf: byte.count == 1 ? "0\(byte)" : "\(byte)")
     }
 }

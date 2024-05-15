@@ -17,7 +17,7 @@ final class CoordinatesParserTests: XCTestCase {
         var content = "X1:12 X2:34 Y1:ab"[...]
         let parser = Parse(input: Substring.self) { CoordinatesParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "X1:12 X2:34 Y1:ab")
+        XCTAssertNoDifference(content, "ab")
     }
 
     func test_print() throws {

@@ -1,13 +1,12 @@
 extension String {
-    func trimmingEdges(while predicate: (Element) throws -> Bool) rethrows -> Substring {
-        try self
-            .trimmingPrefix(while: predicate)
-            .trimmingSuffix(while: predicate)
+    func trimmingEdges(while predicate: (Element) throws -> Bool) rethrows -> String {
+        let trimmed = try trimmingPrefix(while: predicate).trimmingSuffix(while: predicate)
+        return String(trimmed)
     }
 
-    func prefix(upTo substring: Substring) -> Substring {
-        guard let range = range(of: substring) else { return self[...] }
-        return self[..<range.lowerBound]
+    func prefix(upTo substring: Substring) -> String {
+        guard let range = range(of: substring) else { return self }
+        return String(self[..<range.lowerBound])
     }
 }
 

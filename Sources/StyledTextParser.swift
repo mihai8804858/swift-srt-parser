@@ -42,7 +42,7 @@ struct StyledTextParser {
             let children = try components.map(print).joined()
             return "<u>\(children)</u>"
         case .color(let color, let components):
-            let color = String(decoding: try ColorParser().print(color), as: UTF8.self)
+            let color = try ColorParser().print(color)
             let children = try components.map(print).joined()
             return "<font color=\"\(color)\">\(children)</font>"
         }

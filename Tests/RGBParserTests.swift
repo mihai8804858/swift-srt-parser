@@ -17,7 +17,7 @@ final class RGBParserTests: XCTestCase {
         var content = "#FB1C"[...]
         let parser = Parse(input: Substring.self) { RGBParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "#FB1C")
+        XCTAssertNoDifference(content, "")
     }
 
     func test_print() throws {

@@ -40,7 +40,7 @@ final class CueMetadataParserTests: XCTestCase {
         var content = "12:34:56,789 --> X1:12 X2:ab"[...]
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "12:34:56,789 --> X1:12 X2:ab")
+        XCTAssertNoDifference(content, "X1:12 X2:ab")
     }
 
     func test_print_full() throws {

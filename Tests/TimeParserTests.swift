@@ -17,7 +17,7 @@ final class TimeParserTests: XCTestCase {
         var content = "12:34;56.789"[...]
         let parser = Parse(input: Substring.self) { TimeParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "12:34;56.789")
+        XCTAssertNoDifference(content, ";56.789")
     }
 
     func test_print() throws {
