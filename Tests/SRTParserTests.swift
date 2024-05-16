@@ -215,7 +215,7 @@ final class SRTParserTests: XCTestCase {
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 43, milliseconds: 295)
                     ),
                     coordinates: nil,
-                    position: nil
+                    position: .bottomCenter
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[speaks Icelandic]")
@@ -229,7 +229,7 @@ final class SRTParserTests: XCTestCase {
                         end: SRT.Time(hours: 0, minutes: 2, seconds: 48, milliseconds: 295)
                     ),
                     coordinates: nil,
-                    position: nil
+                    position: .topRight
                 ),
                 text: SRT.StyledText(components: [
                     .plain(text: "[man 3] "),
@@ -258,11 +258,11 @@ final class SRTParserTests: XCTestCase {
 
         5
         00:02:41,000 --> 00:02:43,295
-        [speaks Icelandic]
+        {\\an2}[speaks Icelandic]
 
         6
         00:02:45,000 --> 00:02:48,295
-        [man 3] <i>♪The admiral
+        {\\an9}[man 3] <i>♪The admiral
         begins his expedition♪</i>
         """)
     }
