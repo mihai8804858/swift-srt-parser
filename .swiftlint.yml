@@ -13,3 +13,5 @@ nesting:
     warning: 3
 function_body_length:
   warning: 200
+type_body_length:
+  500

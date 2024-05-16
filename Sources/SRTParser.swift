@@ -34,7 +34,7 @@ struct CueParser: ParserPrinter {
         ParsePrint(.memberwise(SRT.Cue.init(counter:metadata:text:))) {
             Int.parser()
             Whitespace(.horizontal)
-            Whitespace(1, .vertical)
+            Whitespace(1..., .vertical)
             CueMetadataParser()
             TextParser()
         }
