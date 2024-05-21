@@ -36,7 +36,7 @@ struct CueParser: ParserPrinter {
             Whitespace(.horizontal)
             Whitespace(1..., .vertical)
             CueMetadataParser()
-            TextParser()
+            TextParser(upTo: .newlines, count: 2)
         }
     }
 }
@@ -50,7 +50,7 @@ struct CueMetadataParser: ParserPrinter {
                 CoordinatesParser()
             }
             Whitespace(.horizontal)
-            Whitespace(1, .vertical)
+            Whitespace(1..., .vertical)
             Optionally {
                 PositionParser()
             }
@@ -126,9 +126,29 @@ struct PositionParser: ParserPrinter {
 }
 
 struct TextParser: ParserPrinter {
+    let terminator: CharacterSet
+    let count: Int
+    let includeTerminator: Bool
+
+    init(upTo terminator: String, count: Int = 1, includeTerminator: Bool = false) {
+        self.terminator = CharacterSet(charactersIn: terminator)
+        self.count = count
+        self.includeTerminator = includeTerminator
+    }
+
+    init(upTo terminator: CharacterSet, count: Int = 1, includeTerminator: Bool = false) {
+        self.terminator = terminator
+        self.count = count
+        self.includeTerminator = includeTerminator
+    }
+
     func parse(_ input: inout Substring) throws -> SRT.StyledText {
-        let prefix = String(input).prefix(upTo: "\n\n")
-        let text = try StyledTextParser().parse(prefix)
+        let prefix = input.prefix(
+            upTo: terminator,
+            count: count,
+            includeTerminator: includeTerminator
+        )
+        let text = try StyledTextParser().parse(String(prefix))
         input.removeFirst(prefix.count)
 
         return text
