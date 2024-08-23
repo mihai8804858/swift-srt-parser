@@ -4,11 +4,21 @@ extension String {
     func trimmingEdges(while predicate: (Element) throws -> Bool) rethrows -> String {
         try String(self[...].trimmingEdges(while: predicate))
     }
+
+    func trimmingBOM() -> String {
+        String(self[...].trimmingEdges(while: \.containsBOM))
+    }
 }
 
 extension CharacterSet {
     func containsUnicodeScalars(of character: Character) -> Bool {
         character.unicodeScalars.allSatisfy(contains)
+    }
+}
+
+extension Character {
+    var containsBOM: Bool {
+        !Set(unicodeScalars).isDisjoint(with: UnicodeScalar.byteOrderMarks)
     }
 }
 
@@ -48,4 +58,12 @@ extension Substring {
 
         return result
     }
+}
+
+extension UnicodeScalar {
+    static let byteOrderMarks = Set([
+        UnicodeScalar(0xEFBBBF),
+        UnicodeScalar(0xFFFE),
+        UnicodeScalar(0xFEFF)
+    ].compactMap { $0 })
 }

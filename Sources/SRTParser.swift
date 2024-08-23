@@ -7,7 +7,7 @@ public struct SRTParser {
     public init() {}
 
     public func parse(_ content: String) throws -> SRT {
-        try parser.parse(content.trimmingEdges(while: \.isNewline))
+        try parser.parse(content.trimmingEdges(while: \.isNewline).trimmingBOM())
     }
 
     public func print(_ srt: SRT) throws -> String {
