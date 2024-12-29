@@ -1,6 +1,6 @@
-import RegexBuilder
+@preconcurrency import RegexBuilder
 
-struct StyledTextParser {
+struct StyledTextParser: Sendable {
     private let parsers: [StyledTextComponentParser] = [
         BoldComponentParser(),
         ItalicComponentParser(),
@@ -73,11 +73,11 @@ struct StyledTextParser {
     }
 }
 
-private protocol StyledTextComponentParser {
+private protocol StyledTextComponentParser: Sendable {
     func parse(_ text: String) throws -> (range: Range<String.Index>, component: SRT.StyledText.Component)?
 }
 
-private struct BoldComponentParser: StyledTextComponentParser {
+private struct BoldComponentParser: StyledTextComponentParser, Sendable {
     private let textReference = Reference(Substring.self)
 
     private var regex: Regex<(Substring, Substring)> {
@@ -107,7 +107,7 @@ private struct BoldComponentParser: StyledTextComponentParser {
     }
 }
 
-private struct ItalicComponentParser: StyledTextComponentParser {
+private struct ItalicComponentParser: StyledTextComponentParser, Sendable {
     private let textReference = Reference(Substring.self)
 
     private var regex: Regex<(Substring, Substring)> {
@@ -137,7 +137,7 @@ private struct ItalicComponentParser: StyledTextComponentParser {
     }
 }
 
-private struct UnderlineComponentParser: StyledTextComponentParser {
+private struct UnderlineComponentParser: StyledTextComponentParser, Sendable {
     private let textReference = Reference(Substring.self)
 
     private var regex: Regex<(Substring, Substring)> {
@@ -167,7 +167,7 @@ private struct UnderlineComponentParser: StyledTextComponentParser {
     }
 }
 
-private struct ColorComponentParser: StyledTextComponentParser {
+private struct ColorComponentParser: StyledTextComponentParser, Sendable {
     private let colorReference = Reference(Substring.self)
     private let textReference = Reference(Substring.self)
 

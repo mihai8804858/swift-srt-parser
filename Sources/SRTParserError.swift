@@ -1,3 +1,3 @@
-struct SRTParsingError: Error {
+struct SRTParsingError: Error, Sendable {
     let message: String
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SRT: Hashable {
+public struct SRT: Hashable, Sendable {
     public let cues: [Cue]
 
     public init(cues: [Cue]) {
@@ -9,7 +9,7 @@ public struct SRT: Hashable {
 }
 
 extension SRT {
-    public struct Cue: Hashable {
+    public struct Cue: Hashable, Sendable {
         public let counter: Int
         public let metadata: CueMetadata
         public let text: StyledText
@@ -23,7 +23,7 @@ extension SRT {
 }
 
 extension SRT {
-    public struct CueMetadata: Hashable {
+    public struct CueMetadata: Hashable, Sendable {
         public let timing: Timing
         public let coordinates: Coordinates?
         public let position: Position?
@@ -37,7 +37,7 @@ extension SRT {
 }
 
 extension SRT {
-    public struct Timing: Hashable {
+    public struct Timing: Hashable, Sendable {
         public let start: Time
         public let end: Time
 
@@ -49,7 +49,7 @@ extension SRT {
 }
 
 extension SRT {
-    public struct Time: Hashable {
+    public struct Time: Hashable, Sendable {
         public let hours: Int
         public let minutes: Int
         public let seconds: Int
@@ -75,7 +75,7 @@ extension SRT {
 
 // swiftlint:disable identifier_name
 extension SRT {
-    public struct Coordinates: Hashable {
+    public struct Coordinates: Hashable, Sendable {
         public let x1: Int
         public let x2: Int
         public let y1: Int
@@ -92,7 +92,7 @@ extension SRT {
 // swiftlint:enable identifier_name
 
 extension SRT {
-    public enum Position: Hashable {
+    public enum Position: Hashable, Sendable {
         case topLeft
         case topCenter
         case topRight
@@ -137,8 +137,8 @@ extension SRT {
 }
 
 extension SRT {
-    public enum Color: Hashable {
-        public struct RGB: Hashable {
+    public enum Color: Hashable, Sendable {
+        public struct RGB: Hashable, Sendable {
             public let red: UInt8
             public let green: UInt8
             public let blue: UInt8
@@ -156,8 +156,8 @@ extension SRT {
 }
 
 extension SRT {
-    public struct StyledText: Hashable {
-        public enum Component: Hashable {
+    public struct StyledText: Hashable, Sendable {
+        public enum Component: Hashable, Sendable {
             case plain(text: String)
             case bold(children: [Component])
             case italic(children: [Component])

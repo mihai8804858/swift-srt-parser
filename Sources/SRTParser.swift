@@ -1,7 +1,7 @@
 import Foundation
 import Parsing
 
-public struct SRTParser {
+public struct SRTParser: Sendable {
     private let parser = CuesParser()
 
     public init() {}
@@ -15,7 +15,7 @@ public struct SRTParser {
     }
 }
 
-struct CuesParser: ParserPrinter {
+struct CuesParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT> {
         ParsePrint(.memberwise(SRT.init(cues:))) {
             Many {
@@ -29,7 +29,7 @@ struct CuesParser: ParserPrinter {
     }
 }
 
-struct CueParser: ParserPrinter {
+struct CueParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Cue> {
         ParsePrint(.memberwise(SRT.Cue.init(counter:metadata:text:))) {
             Int.parser()
@@ -41,7 +41,7 @@ struct CueParser: ParserPrinter {
     }
 }
 
-struct CueMetadataParser: ParserPrinter {
+struct CueMetadataParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.CueMetadata> {
         ParsePrint(.memberwise(SRT.CueMetadata.init(timing:coordinates:position:))) {
             TimingParser()
@@ -58,7 +58,7 @@ struct CueMetadataParser: ParserPrinter {
     }
 }
 
-struct TimingParser: ParserPrinter {
+struct TimingParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Timing> {
         ParsePrint(.memberwise(SRT.Timing.init(start:end:))) {
             TimeParser()
@@ -70,7 +70,7 @@ struct TimingParser: ParserPrinter {
     }
 }
 
-struct TimeParser: ParserPrinter {
+struct TimeParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Time> {
         ParsePrint(.memberwise(SRT.Time.init(hours:minutes:seconds:milliseconds:))) {
             Int.parser()
@@ -93,7 +93,7 @@ struct TimeParser: ParserPrinter {
     }
 }
 
-struct CoordinatesParser: ParserPrinter {
+struct CoordinatesParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Coordinates> {
         ParsePrint(.memberwise(SRT.Coordinates.init(x1:x2:y1:y2:))) {
             "X1:"
@@ -111,7 +111,7 @@ struct CoordinatesParser: ParserPrinter {
     }
 }
 
-struct PositionParser: ParserPrinter {
+struct PositionParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Position> {
         ParsePrint(.memberwise(SRT.Position.init(padNumber:))) {
             "{\\an"
@@ -125,7 +125,7 @@ struct PositionParser: ParserPrinter {
     }
 }
 
-struct TextParser: ParserPrinter {
+struct TextParser: ParserPrinter, Sendable {
     let terminator: CharacterSet
     let count: Int
     let includeTerminator: Bool
@@ -159,7 +159,7 @@ struct TextParser: ParserPrinter {
     }
 }
 
-struct ColorParser: ParserPrinter {
+struct ColorParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Color> {
         OneOf {
             RGBParser()
@@ -171,7 +171,7 @@ struct ColorParser: ParserPrinter {
     }
 }
 
-struct RGBParser: ParserPrinter {
+struct RGBParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Color.RGB> {
         ParsePrint(.memberwise(SRT.Color.RGB.init(red:green:blue:))) {
             "#"
@@ -182,7 +182,7 @@ struct RGBParser: ParserPrinter {
     }
 }
 
-struct HexByteParser: ParserPrinter {
+struct HexByteParser: ParserPrinter, Sendable {
     func parse(_ input: inout Substring) throws -> UInt8 {
         let prefix = input.prefix(2)
         guard prefix.count == 2, let byte = UInt8(prefix, radix: 16) else {
