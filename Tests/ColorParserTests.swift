@@ -9,8 +9,8 @@ final class ColorParserTests: XCTestCase {
         let expected = SRT.Color.named("red")
         let parser = Parse(input: Substring.self) { ColorParser() }
         let color = try parser.parse(&content)
-        XCTAssertNoDifference(color, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(color, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_hex_success() throws {
@@ -18,15 +18,15 @@ final class ColorParserTests: XCTestCase {
         let expected = SRT.Color.rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C))
         let parser = Parse(input: Substring.self) { ColorParser() }
         let color = try parser.parse(&content)
-        XCTAssertNoDifference(color, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(color, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_failure() throws {
         var content = ""[...]
         let parser = Parse(input: Substring.self) { ColorParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(content, "")
     }
 
     func test_named_print() throws {
@@ -34,7 +34,7 @@ final class ColorParserTests: XCTestCase {
         let color = SRT.Color.named("blue")
         let parser = Parse(input: Substring.self) { ColorParser() }
         try parser.print(color, into: &content)
-        XCTAssertNoDifference(content, "blue")
+        expectNoDifference(content, "blue")
     }
 
     func test_hex_print() throws {
@@ -42,6 +42,6 @@ final class ColorParserTests: XCTestCase {
         let color = SRT.Color.rgb(.init(red: 0xFB, green: 0xFF, blue: 0x1C))
         let parser = Parse(input: Substring.self) { ColorParser() }
         try parser.print(color, into: &content)
-        XCTAssertNoDifference(content, "#FBFF1C")
+        expectNoDifference(content, "#FBFF1C")
     }
 }

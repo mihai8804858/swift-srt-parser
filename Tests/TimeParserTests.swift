@@ -9,15 +9,15 @@ final class TimeParserTests: XCTestCase {
         let expected = SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789)
         let parser = Parse(input: Substring.self) { TimeParser() }
         let time = try parser.parse(&content)
-        XCTAssertNoDifference(time, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(time, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_failure() throws {
         var content = "12:34;56.789"[...]
         let parser = Parse(input: Substring.self) { TimeParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, ";56.789")
+        expectNoDifference(content, ";56.789")
     }
 
     func test_print() throws {
@@ -25,6 +25,6 @@ final class TimeParserTests: XCTestCase {
         let time = SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789)
         let parser = Parse(input: Substring.self) { TimeParser() }
         try parser.print(time, into: &content)
-        XCTAssertNoDifference(content, "12:34:56,789")
+        expectNoDifference(content, "12:34:56,789")
     }
 }

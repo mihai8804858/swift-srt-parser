@@ -9,15 +9,15 @@ final class RGBParserTests: XCTestCase {
         let expected = SRT.Color.RGB(red: 0xFB, green: 0xFF, blue: 0x1C)
         let parser = Parse(input: Substring.self) { RGBParser() }
         let color = try parser.parse(&content)
-        XCTAssertNoDifference(color, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(color, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_failure() throws {
         var content = "#FB1C"[...]
         let parser = Parse(input: Substring.self) { RGBParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(content, "")
     }
 
     func test_print() throws {
@@ -25,6 +25,6 @@ final class RGBParserTests: XCTestCase {
         let color = SRT.Color.RGB(red: 0xFB, green: 0xFF, blue: 0x1C)
         let parser = Parse(input: Substring.self) { RGBParser() }
         try parser.print(color, into: &content)
-        XCTAssertNoDifference(content, "#FBFF1C")
+        expectNoDifference(content, "#FBFF1C")
     }
 }

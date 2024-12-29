@@ -12,15 +12,15 @@ final class TimingParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { TimingParser() }
         let time = try parser.parse(&content)
-        XCTAssertNoDifference(time, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(time, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_failure() throws {
         var content = "12:34:56,789 --> "[...]
         let parser = Parse(input: Substring.self) { TimingParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(content, "")
     }
 
     func test_print() throws {
@@ -31,6 +31,6 @@ final class TimingParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { TimingParser() }
         try parser.print(timing, into: &content)
-        XCTAssertNoDifference(content, "12:34:56,789 --> 23:45:67,890")
+        expectNoDifference(content, "12:34:56,789 --> 23:45:67,890")
     }
 }

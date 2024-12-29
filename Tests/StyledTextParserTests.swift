@@ -33,7 +33,7 @@ final class StyledTextParserTests: XCTestCase {
         ])
         let parser = StyledTextParser()
         let components = try parser.parse(content)
-        XCTAssertNoDifference(components, expected)
+        expectNoDifference(components, expected)
     }
 
     func test_print() throws {
@@ -55,7 +55,7 @@ final class StyledTextParserTests: XCTestCase {
             .italic(children: [.plain(text: "♪The admiral\nbegins his expedition♪")])
         ])
         let content = try StyledTextParser().print(text)
-        XCTAssertNoDifference(content, """
+        expectNoDifference(content, """
         Senator, we're making
         our <b>final</b> approach into <u>Coruscant</u>.
         <b>Very good, <i>Lieutenant</i></b>.

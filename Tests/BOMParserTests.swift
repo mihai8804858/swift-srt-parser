@@ -20,6 +20,6 @@ final class BOMParserTests: XCTestCase {
         ])
         let parser = SRTParser()
         let srt = try parser.parse(contentWithBOM)
-        XCTAssertNoDifference(srt, expected)
+        expectNoDifference(srt, expected)
     }
 }

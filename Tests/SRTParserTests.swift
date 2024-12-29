@@ -136,7 +136,7 @@ final class SRTParserTests: XCTestCase {
         ])
         let parser = SRTParser()
         let srt = try parser.parse(content)
-        XCTAssertNoDifference(srt, expected)
+        expectNoDifference(srt, expected)
     }
 
     func test_print() throws {
@@ -238,7 +238,7 @@ final class SRTParserTests: XCTestCase {
             )
         ])
         let content = try SRTParser().print(srt)
-        XCTAssertNoDifference(content, """
+        expectNoDifference(content, """
         1
         00:02:17,440 --> 00:02:20,375
         Senator, we're making

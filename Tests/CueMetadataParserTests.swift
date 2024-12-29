@@ -16,8 +16,8 @@ final class CueMetadataParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         let time = try parser.parse(&content)
-        XCTAssertNoDifference(time, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(time, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_partial_success() throws {
@@ -32,15 +32,15 @@ final class CueMetadataParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         let time = try parser.parse(&content)
-        XCTAssertNoDifference(time, expected)
-        XCTAssertNoDifference(content, "")
+        expectNoDifference(time, expected)
+        expectNoDifference(content, "")
     }
 
     func test_parse_failure() throws {
         var content = "12:34:56,789 --> X1:12 X2:ab"[...]
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         XCTAssertThrowsError(try parser.parse(&content))
-        XCTAssertNoDifference(content, "X1:12 X2:ab")
+        expectNoDifference(content, "X1:12 X2:ab")
     }
 
     func test_print_full() throws {
@@ -55,7 +55,7 @@ final class CueMetadataParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         try parser.print(metadata, into: &content)
-        XCTAssertNoDifference(content, "12:34:56,789 --> 23:45:67,890 X1:12 X2:34 Y1:56 Y2:78\n{\\an5}")
+        expectNoDifference(content, "12:34:56,789 --> 23:45:67,890 X1:12 X2:34 Y1:56 Y2:78\n{\\an5}")
     }
 
     func test_print_partial() throws {
@@ -70,6 +70,6 @@ final class CueMetadataParserTests: XCTestCase {
         )
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
         try parser.print(metadata, into: &content)
-        XCTAssertNoDifference(content, "12:34:56,789 --> 23:45:67,890\n")
+        expectNoDifference(content, "12:34:56,789 --> 23:45:67,890\n")
     }
 }
