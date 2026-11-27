@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class CueParserTests: XCTestCase {
-    func test_parse_success() throws {
+struct CueParserTests {
+    @Test func parse_success() throws {
         var content = """
         1
         00:02:17,440 --> 00:02:20,375 X1:12 X2:34 Y1:56 Y2:78
@@ -31,14 +31,14 @@ final class CueParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_failure() throws {
+    @Test func parse_failure() throws {
         var content = """
         A
         00:02:17,440 -->
         ???
         """[...]
         let parser = Parse(input: Substring.self) { CueParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, """
         A
         00:02:17,440 -->
@@ -46,7 +46,7 @@ final class CueParserTests: XCTestCase {
         """)
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         var content = ""[...]
         let cue = SRT.Cue(
             counter: 1,

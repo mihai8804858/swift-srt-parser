@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class SRTParserTests: XCTestCase {
-    func test_parse() throws {
+struct SRTParserTests {
+    @Test func parse() throws {
         // swiftlint:disable trailing_whitespace
         let content = """
         1
@@ -139,7 +139,7 @@ final class SRTParserTests: XCTestCase {
         expectNoDifference(srt, expected)
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         let srt = SRT(cues: [
             SRT.Cue(
                 counter: 1,

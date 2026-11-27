@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class HexByteParserTests: XCTestCase {
-    func test_parse_success() throws {
+struct HexByteParserTests {
+    @Test func parse_success() throws {
         var content = "3A"[...]
         let expected = UInt8(0x3A)
         let parser = Parse(input: Substring.self) { HexByteParser() }
@@ -13,21 +13,21 @@ final class HexByteParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_outOfBounds() throws {
+    @Test func parse_outOfBounds() throws {
         var content = "HI"[...]
         let parser = Parse(input: Substring.self) { HexByteParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "HI")
     }
 
-    func test_parse_shortLength() throws {
+    @Test func parse_shortLength() throws {
         var content = "1"[...]
         let parser = Parse(input: Substring.self) { HexByteParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "1")
     }
 
-    func test_print_singleCharacter() throws {
+    @Test func print_singleCharacter() throws {
         var content = ""[...]
         let byte = UInt8(0xC)
         let parser = Parse(input: Substring.self) { HexByteParser() }
@@ -35,7 +35,7 @@ final class HexByteParserTests: XCTestCase {
         expectNoDifference(content, "0C")
     }
 
-    func test_print_twoCharacters() throws {
+    @Test func print_twoCharacters() throws {
         var content = ""[...]
         let byte = UInt8(0x4B)
         let parser = Parse(input: Substring.self) { HexByteParser() }

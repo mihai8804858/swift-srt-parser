@@ -1,9 +1,9 @@
 @testable import SRTParser
 import CustomDump
-import XCTest
+import Testing
 
-final class StyledTextParserTests: XCTestCase {
-    func test_parse() throws {
+struct StyledTextParserTests {
+    @Test func parse() throws {
         let content = """
         Senator, we're making
         our <b>final</b> approach into {u}Coruscant{/u}.
@@ -36,7 +36,7 @@ final class StyledTextParserTests: XCTestCase {
         expectNoDifference(components, expected)
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         let text = SRT.StyledText(components: [
             .plain(text: "Senator, we're making\nour "),
             .bold(children: [.plain(text: "final")]),

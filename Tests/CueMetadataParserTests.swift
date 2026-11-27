@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class CueMetadataParserTests: XCTestCase {
-    func test_parse_full_success() throws {
+struct CueMetadataParserTests {
+    @Test func parse_full_success() throws {
         var content = "12:34:56,789 --> 23:45:67,890 X1:12 X2:34 Y1:56 Y2:78\n{\\an8}"[...]
         let expected = SRT.CueMetadata(
             timing: SRT.Timing(
@@ -20,7 +20,7 @@ final class CueMetadataParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_partial_success() throws {
+    @Test func parse_partial_success() throws {
         var content = "12:34:56,789 --> 23:45:67,890\n"[...]
         let expected = SRT.CueMetadata(
             timing: SRT.Timing(
@@ -36,14 +36,14 @@ final class CueMetadataParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_failure() throws {
+    @Test func parse_failure() throws {
         var content = "12:34:56,789 --> X1:12 X2:ab"[...]
         let parser = Parse(input: Substring.self) { CueMetadataParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "X1:12 X2:ab")
     }
 
-    func test_print_full() throws {
+    @Test func print_full() throws {
         var content = ""[...]
         let metadata = SRT.CueMetadata(
             timing: SRT.Timing(
@@ -58,7 +58,7 @@ final class CueMetadataParserTests: XCTestCase {
         expectNoDifference(content, "12:34:56,789 --> 23:45:67,890 X1:12 X2:34 Y1:56 Y2:78\n{\\an5}")
     }
 
-    func test_print_partial() throws {
+    @Test func print_partial() throws {
         var content = ""[...]
         let metadata = SRT.CueMetadata(
             timing: SRT.Timing(

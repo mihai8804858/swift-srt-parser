@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class TimingParserTests: XCTestCase {
-    func test_parse_success() throws {
+struct TimingParserTests {
+    @Test func parse_success() throws {
         var content = "12:34:56,789 --> 23:45:67,890"[...]
         let expected = SRT.Timing(
             start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),
@@ -16,14 +16,14 @@ final class TimingParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_failure() throws {
+    @Test func parse_failure() throws {
         var content = "12:34:56,789 --> "[...]
         let parser = Parse(input: Substring.self) { TimingParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "")
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         var content = ""[...]
         let timing = SRT.Timing(
             start: SRT.Time(hours: 12, minutes: 34, seconds: 56, milliseconds: 789),

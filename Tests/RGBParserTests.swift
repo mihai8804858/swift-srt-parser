@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class RGBParserTests: XCTestCase {
-    func test_parse_success() throws {
+struct RGBParserTests {
+    @Test func parse_success() throws {
         var content = "#FBFF1C"[...]
         let expected = SRT.Color.RGB(red: 0xFB, green: 0xFF, blue: 0x1C)
         let parser = Parse(input: Substring.self) { RGBParser() }
@@ -13,14 +13,14 @@ final class RGBParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_failure() throws {
+    @Test func parse_failure() throws {
         var content = "#FB1C"[...]
         let parser = Parse(input: Substring.self) { RGBParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "")
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         var content = ""[...]
         let color = SRT.Color.RGB(red: 0xFB, green: 0xFF, blue: 0x1C)
         let parser = Parse(input: Substring.self) { RGBParser() }

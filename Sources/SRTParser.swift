@@ -163,10 +163,22 @@ struct ColorParser: ParserPrinter, Sendable {
     var body: some ParserPrinter<Substring, SRT.Color> {
         OneOf {
             RGBParser()
-                .map(.case(SRT.Color.rgb))
+                .map(.convert(
+                    apply: { SRT.Color.rgb($0) },
+                    unapply: { color in
+                        guard case let .rgb(rgb) = color else { return nil }
+                        return rgb
+                    }
+                ))
             Prefix(1...) { $0 != "\"" }
                 .map(.string)
-                .map(.case(SRT.Color.named))
+                .map(.convert(
+                    apply: { SRT.Color.named($0) },
+                    unapply: { color in
+                        guard case let .named(name) = color else { return nil }
+                        return name
+                    }
+                ))
         }
     }
 }

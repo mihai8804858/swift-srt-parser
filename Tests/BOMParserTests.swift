@@ -1,11 +1,11 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class BOMParserTests: XCTestCase {
-    func test_parse_bom() throws {
-        let contentWithBOM = "﻿1\r\n00:00:30,324 --> 00:00:33,898\r\nUN JOC DE ZARURI\r\n\r\n"
+struct BOMParserTests {
+    @Test func parse_bom() throws {
+        let contentWithBOM = "\u{FEFF}1\r\n00:00:30,324 --> 00:00:33,898\r\nUN JOC DE ZARURI\r\n\r\n"
         let expected = SRT(cues: [
             SRT.Cue(
                 counter: 1,

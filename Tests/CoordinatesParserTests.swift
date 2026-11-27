@@ -1,10 +1,10 @@
 @testable import SRTParser
 import Parsing
 import CustomDump
-import XCTest
+import Testing
 
-final class CoordinatesParserTests: XCTestCase {
-    func test_parse_success() throws {
+struct CoordinatesParserTests {
+    @Test func parse_success() throws {
         var content = "X1:12 X2:34 Y1:56 Y2:78"[...]
         let expected = SRT.Coordinates(x1: 12, x2: 34, y1: 56, y2: 78)
         let parser = Parse(input: Substring.self) { CoordinatesParser() }
@@ -13,14 +13,14 @@ final class CoordinatesParserTests: XCTestCase {
         expectNoDifference(content, "")
     }
 
-    func test_parse_failure() throws {
+    @Test func parse_failure() throws {
         var content = "X1:12 X2:34 Y1:ab"[...]
         let parser = Parse(input: Substring.self) { CoordinatesParser() }
-        XCTAssertThrowsError(try parser.parse(&content))
+        #expect(throws: (any Error).self) { try parser.parse(&content) }
         expectNoDifference(content, "ab")
     }
 
-    func test_print() throws {
+    @Test func print() throws {
         var content = ""[...]
         let coordinates = SRT.Coordinates(x1: 12, x2: 34, y1: 56, y2: 78)
         let parser = Parse(input: Substring.self) { CoordinatesParser() }

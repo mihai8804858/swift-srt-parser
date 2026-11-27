@@ -1,10 +1,11 @@
 @testable import SRTParser
 import CustomDump
-import XCTest
+import Foundation
+import Testing
 
-final class IntegrationTests: XCTestCase {
-    func test_integration() throws {
-        let resourcesURL = try XCTUnwrap(Bundle.module.resourceURL?.appendingPathComponent("Subtitles"))
+struct IntegrationTests {
+    @Test func integration() throws {
+        let resourcesURL = try #require(Bundle.module.resourceURL?.appendingPathComponent("Subtitles"))
         let fileNames = try FileManager.default.contentsOfDirectory(atPath: resourcesURL.path)
         for fileName in fileNames.sorted() {
             do {
@@ -13,7 +14,7 @@ final class IntegrationTests: XCTestCase {
                 _ = try SRTParser().parse(contents)
                 print("Succesfully parsed \"\(fileName)\" file")
             } catch {
-                XCTFail("File \"\(fileName)\" failed to parse with error:\n\(error)")
+                Issue.record("File \"\(fileName)\" failed to parse with error:\n\(error)")
             }
         }
     }

@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 
 import PackageDescription
 
@@ -15,8 +15,8 @@ let package = Package(
         .library(name: "SRTParser", targets: ["SRTParser"])
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-parsing", .upToNextMajor(from: "0.13.0")),
-        .package(url: "https://github.com/pointfreeco/swift-custom-dump", .upToNextMajor(from: "1.3.0"))
+        .package(url: "https://github.com/pointfreeco/swift-parsing", from: "0.15.3"),
+        .package(url: "https://github.com/pointfreeco/swift-custom-dump", from: "1.7.3")
     ],
     targets: [
         .target(
@@ -25,8 +25,7 @@ let package = Package(
                 .product(name: "Parsing", package: "swift-parsing")
             ],
             path: "Sources",
-            resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
-            swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+            resources: [.copy("Resources/PrivacyInfo.xcprivacy")]
         ),
         .testTarget(
             name: "SRTParserTests",
